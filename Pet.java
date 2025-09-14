@@ -12,7 +12,6 @@ public class Pet{
         cor = Cor;
     }
 
-
     // Getters
     public String getNome(){
         return nome;
@@ -25,5 +24,4 @@ public class Pet{
     public String getCor(){
         return cor;
     }
-
 }
