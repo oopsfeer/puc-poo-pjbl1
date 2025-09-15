@@ -1,8 +1,11 @@
 import java.util.Scanner;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 
 public class PetShop {
 
+    // Lista que guarda todos os tutores cadastrados
     private static ArrayList<Tutor> tutors = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -10,15 +13,26 @@ public class PetShop {
         Scanner leitor = new Scanner(System.in); // leitura do teclado
         popularCadastro(); // dados iniciais
 
+        // laço principal
         while (true) {
+
+            // entrada da opção do menu
             String op = mostrarMenuEObterOpcao(leitor);
+
+            // direcionamento a partir da escolha do menu
             switch (op) {
+
+                // cadastrar tutor + pet(s)
                 case "c":
                     cadastrarTutorEPets(leitor);
                     break;
+
+                // imprimir cadastro
                 case "i":
                     imprimirCadastro();
                     break;
+
+                // buscar pets pelo codigo do tutor
                 case "b":
                     Integer codBusca = pedirCodigo(leitor, "Informe o código do tutor: ");
                     if (codBusca == null) {
@@ -33,6 +47,8 @@ public class PetShop {
                         System.out.println(t);
                     }
                     break;
+
+                // excluir pets pelo codigo do tutor
                 case "e":
                     Integer codExc = pedirCodigo(leitor, "Informe o código do tutor para excluir: ");
                     if (codExc == null) {
@@ -45,16 +61,18 @@ public class PetShop {
                         System.out.println("Tutor não encontrado.");
                     }
                     break;
+
+                // encerrar
                 case "x":
                     System.out.println("Encerrando. Até mais!");
                     leitor.close();
                     return;
-                default:
-                    System.out.println("Opção inválida.");
+
             }
         }
     }
 
+    // metodo que exibe o menu e retorna a opcao escolhida pelo usuario
     private static String mostrarMenuEObterOpcao(Scanner leitor) {
         while (true) {
             System.out.println();
@@ -76,6 +94,8 @@ public class PetShop {
         }
     }
 
+    // metodo que solicita um numero pro usuario, retorna o valor 
+    // se ele foi digitado corretamente ou null se a entrada nao for um valor numerico
     private static Integer pedirCodigo(Scanner leitor, String prompt) {
         System.out.print(prompt);
         String s = leitor.nextLine().trim();
@@ -83,6 +103,7 @@ public class PetShop {
         return toInt(s); // conversão simples, sem exceptions
     }
 
+    // metodo que verifica se a string contem apenas digitos
     private static boolean isNumero(String s) {
         if (s == null || s.length() == 0) return false;
         for (int i = 0; i < s.length(); i++) {
@@ -92,6 +113,7 @@ public class PetShop {
         return true;
     }
 
+    // metodo com uma logica manual para converter string para int
     private static int toInt(String s) {
         int n = 0;
         for (int i = 0; i < s.length(); i++) {
@@ -100,6 +122,7 @@ public class PetShop {
         return n;
     }
 
+    // metodo que retorna uma data de nascimento valida para o tutor
     private static int[] lerDataValida(Scanner leitor) {
         while (true) {
             System.out.print("Data de nascimento (dd mm aaaa): ");
@@ -126,6 +149,8 @@ public class PetShop {
             return new int[]{ d, m, a };
         }
     }
+
+    // metodo que verifica se a data entrada pelo usuario é uma data valida
     public static boolean validaData(int d, int m, int a) {
         if (a < 1900 || a > 2100) return false; // faixa simples
         if (m < 1 || m > 12) return false;
@@ -136,20 +161,30 @@ public class PetShop {
         } else {
             if (d < 1 || d > diasMes[m - 1]) return false;
         }
+
+        // teste se a data está no futuro
+        int dAtual = LocalDate.now().getDayOfMonth();
+        int mAtual = LocalDate.now().getMonthValue();
+        int aAtual = LocalDate.now().getYear();        
+        if (a > aAtual || (a == aAtual && m > mAtual) || (a == aAtual && m == mAtual && d > dAtual)) return false;
+
         return true;
     }
 
+    // verifica se um ano é bissexto
     private static boolean isBissexto(int a) {
         if (a % 400 == 0) return true;
         if (a % 100 == 0) return false;
         return (a % 4 == 0);
     }
 
+    // metodo para gerar o codigo do tutor
     public static int geraCodigo() {
         if (tutors.size() == 0) return 1;
         return tutors.get(tutors.size() - 1).getCodigo() + 1;
     }
 
+    // metodo para popular o cadastro inicial
     public static void popularCadastro() {
         Tutor t1 = new Tutor("Ana Silva",  geraCodigo(), "Rua das Acácias, 123", 15, 5, 1990);
         t1.incluiPet("Bidu", "Cachorro", "Azul");
@@ -167,6 +202,7 @@ public class PetShop {
         tutors.add(t3);
     }
 
+    // metodo para cadastrar tutor e pets
     public static void cadastrarTutorEPets(Scanner leitor) {
         while (true) {
             System.out.print("Nome do tutor (vazio para encerrar cadastro): ");
@@ -178,6 +214,13 @@ public class PetShop {
 
             int[] dma = lerDataValida(leitor);
             int d = dma[0], m = dma[1], a = dma[2];
+
+            // Verifica se o tutor tem mais de 18 anos
+            int idade = Period.between(LocalDate.of(a, m, d), LocalDate.now()).getYears();
+            if (idade<18){
+                System.out.println("O tutor precisa ter mais que 18 anos! Programa encerrado.");
+                return;
+            }
 
             System.out.print("Endereço: ");
             String endereco = leitor.nextLine().trim();
@@ -205,6 +248,7 @@ public class PetShop {
         }
     }
 
+    // metodo para imprimir o cadastro
     public static void imprimirCadastro() {
         System.out.println("--- CADASTRO DE TUTORES E PETS -------------------------------------------------");
         for (int i = 0; i < tutors.size(); i++) {
@@ -212,6 +256,7 @@ public class PetShop {
         }
     }
 
+    // metodo para buscar o tutor pelo codigo
     public static Tutor buscarPorCodigo(int cod) {
         for (int i = 0; i < tutors.size(); i++) {
             if (tutors.get(i).getCodigo() == cod) return tutors.get(i);
@@ -219,6 +264,7 @@ public class PetShop {
         return null;
     }
 
+    // metodo para excluir o tutor pelo codigo
     public static boolean excluirPorCodigo(int cod) {
         for (int i = 0; i < tutors.size(); i++) {
             if (tutors.get(i).getCodigo() == cod) {
