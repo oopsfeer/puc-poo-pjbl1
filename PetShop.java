@@ -218,7 +218,7 @@ public class PetShop {
             // Verifica se o tutor tem mais de 18 anos
             int idade = Period.between(LocalDate.of(a, m, d), LocalDate.now()).getYears();
             if (idade<18){
-                System.out.println("O tutor precisa ter mais que 18 anos! Programa encerrado.");
+                System.out.println("O tutor precisa ter mais que 18 anos! Cadastro encerrado.");
                 return;
             }
 
