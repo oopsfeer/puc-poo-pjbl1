@@ -64,7 +64,7 @@ public class PetShop {
 
                 // encerrar
                 case "x":
-                    System.out.println("Encerrando. Até mais!");
+                    System.out.println("\nEncerrando. Até mais!");
                     leitor.close();
                     return;
 
@@ -83,8 +83,8 @@ public class PetShop {
             System.out.println("[e] Excluir tutor por código");
             System.out.println("[x] Encerrar");
             System.out.print("Opcao: ");
-            String op = leitor.nextLine().trim().toLowerCase();
-            if (op.length() > 0) {
+            String op = leitor.nextLine().toLowerCase();
+            if (op.length() == 1) {
                 char c = op.charAt(0);
                 if (c == 'c' || c == 'i' || c == 'b' || c == 'e' || c == 'x') {
                     return String.valueOf(c);
@@ -250,7 +250,7 @@ public class PetShop {
 
     // metodo para imprimir o cadastro
     public static void imprimirCadastro() {
-        System.out.println("--- CADASTRO DE TUTORES E PETS -------------------------------------------------");
+        System.out.println("\n--- CADASTRO DE TUTORES E PETS -------------------------------------------------\n");
         for (int i = 0; i < tutors.size(); i++) {
             System.out.println(tutors.get(i));
         }
