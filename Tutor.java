@@ -51,13 +51,13 @@ public class Tutor {
         pets.add(pet);
     }
 
-    // Geração da string com todos os dados do tutor para posterior impressao
+    // Geracao da string com todos os dados do tutor para posterior impressao
     public String toString(){
         String texto = String.format("Codigo tutor: %d%n", codigo);
         texto += String.format("\tNome...........: %s%n", nome);
         texto += String.format("\tData nascimento: %s (%d anos)%n", getNascimento(), getIdade());
         texto += String.format("\tEndereço.......: %s%n", endereco);
-        texto += String.format("\tRelação de Pets: %n");
+        texto += String.format("\tRelacao de Pets: %n");
         
         if (pets.size()==0)
             texto += String.format("\t\t- Nenhum Pet cadastrado.");
