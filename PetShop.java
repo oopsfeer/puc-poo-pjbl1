@@ -13,10 +13,10 @@ public class PetShop {
         Scanner leitor = new Scanner(System.in); // leitura do teclado
         popularCadastro(); // dados iniciais
 
-        // laço principal
+        // laco principal
         while (true) {
 
-            // entrada da opção do menu
+            // entrada da opcao do menu
             String op = mostrarMenuEObterOpcao(leitor);
 
             // direcionamento a partir da escolha do menu
@@ -41,7 +41,7 @@ public class PetShop {
                     }
                     Tutor t = buscarPorCodigo(codBusca);
                     if (t == null) {
-                        System.out.println("Tutor não encontrado.");
+                        System.out.println("Tutor nao encontrado.");
                     } else {
                         System.out.println("Tutor encontrado:");
                         System.out.println(t);
@@ -58,7 +58,7 @@ public class PetShop {
                     if (excluirPorCodigo(codExc)) {
                         System.out.println("Tutor removido com sucesso.");
                     } else {
-                        System.out.println("Tutor não encontrado.");
+                        System.out.println("Tutor nao encontrado.");
                     }
                     break;
 
@@ -82,7 +82,7 @@ public class PetShop {
             System.out.println("[b] Buscar pets por código do tutor");
             System.out.println("[e] Excluir tutor por código");
             System.out.println("[x] Encerrar");
-            System.out.print("Opção: ");
+            System.out.print("Opcao: ");
             String op = leitor.nextLine().trim().toLowerCase();
             if (op.length() > 0) {
                 char c = op.charAt(0);
@@ -90,7 +90,7 @@ public class PetShop {
                     return String.valueOf(c);
                 }
             }
-            System.out.println("Opção inválida. Tente novamente.");
+            System.out.println("Opcao inválida. Tente novamente.");
         }
     }
 
@@ -100,7 +100,7 @@ public class PetShop {
         System.out.print(prompt);
         String s = leitor.nextLine().trim();
         if (!isNumero(s)) return null;
-        return toInt(s); // conversão simples, sem exceptions
+        return toInt(s); // conversao simples, sem exceptions
     }
 
     // metodo que verifica se a string contem apenas digitos
@@ -222,7 +222,7 @@ public class PetShop {
                 return;
             }
 
-            System.out.print("Endereço: ");
+            System.out.print("Endereco: ");
             String endereco = leitor.nextLine().trim();
 
             int codigo = geraCodigo();
