@@ -51,17 +51,7 @@ public class PetShop {
 
                 // excluir pets pelo codigo do tutor
                 case "e":
-                    Integer codExc = pedirCodigo(leitor, "Informe o código do tutor para excluir: ");
-                    if (codExc == null) {
-                        System.out.println("Código inválido.");
-                        break;
-                    }
-                    if (excluirPorCodigo(codExc)) {
-                        System.out.println("Tutor removido com sucesso.");
-                    } 
-                    else {
-                        System.out.println("Tutor nao encontrado.");
-                    }
+                    excluirPorCodigo(leitor);
                     break;
 
                 // encerrar
@@ -82,7 +72,7 @@ public class PetShop {
             System.out.println("[c] Cadastrar tutor e pets");
             System.out.println("[i] Imprimir cadastro completo");
             System.out.println("[b] Buscar pets por código do tutor");
-            System.out.println("[e] Excluir tutor por código");
+            System.out.println("[e] Excluir tutor ou pet");
             System.out.println("[x] Encerrar");
             System.out.print("Opcao: ");
             String op = leitor.nextLine().toLowerCase();
@@ -285,14 +275,115 @@ public class PetShop {
         return null;
     }
 
-    // metodo para excluir o tutor pelo codigo
-    public static boolean excluirPorCodigo(int cod) {
-        for (int i = 0; i < tutors.size(); i++) {
-            if (tutors.get(i).getCodigo() == cod) {
-                tutors.remove(i);
-                return true;
-            }
+    // metodo para excluir ou pet
+    public static void excluirPorCodigo(Scanner leitor) {
+
+        Tutor tutorEncontrado = null;
+
+        // mostrar lista de tutores
+        System.out.println("Tutores:");
+        for (Tutor t : tutors) {
+            System.out.println("\t" + t.getCodigo() + " - " + t.getNome());
         }
-        return false;
+
+        // loop para solicitar um codigo valido para o usuario
+        // 0 retorna para o menu
+        while (true){
+
+            Integer codExc = pedirCodigo(leitor, "Informe o código do tutor (0 volta para o menu): ");
+            if (codExc == null) {
+                System.out.println("Código inválido. Tente novamente.");
+                continue;
+            }
+
+            if (codExc == 0){
+                System.out.println("Voltando para o menu principal...");
+                return;
+            }
+
+            for (Tutor t : tutors){
+                if (t.getCodigo() == codExc){
+                    tutorEncontrado = t;
+                    break;
+                }
+            }
+
+            if (tutorEncontrado == null){
+                System.out.println("Tutor nao encontrado. Tente novamente.");
+                continue;
+            }
+            break;
+        }
+        
+        // submenu para escolher se exclui o tutor ou o pet
+        System.out.println("O que deseja excluir?");
+        System.out.println("[0] Voltar para o menu principal");
+        System.out.println("[1] Tutor e todos os seus pets");
+        System.out.println("[2] Apenas um pet deste tutor");
+
+        // loop para selecionar uma opcao valida
+        while (true){
+
+            Integer opcao = pedirCodigo(leitor, "Escolha: (0 volta para o menu): ");
+
+            if (opcao == null) {
+                System.out.println("Código inválido. Tente novamente.");
+                continue;
+            }
+
+            // retorna para o menu principal
+            if (opcao == 0){
+                System.out.println("Voltando para o menu principal...");
+                return;
+            }
+
+            // remove o tutor
+            if (opcao == 1){
+                tutors.remove(tutorEncontrado);
+                System.out.println("Tutor removido com sucesso!");
+                return;
+            }
+
+            // remove os pets
+            if (opcao == 2){
+                if (tutorEncontrado.getPets().isEmpty()){
+                    System.out.println("Esse tutor nao possui pets cadastrados.");
+                    return;
+                }
+                // lista pets antes de excluir
+                System.out.println("Pets deste tutor:");
+                int idx = 1;
+                for (Pet p : tutorEncontrado.getPets()) {
+                    System.out.println("\t" + idx + " - " + p.getNome() + " (" + p.getTipo() + ")");
+                    idx++;
+                }
+
+                // loop para solicitar um pet existente
+                while (true){
+
+                    Integer petIndex = pedirCodigo(leitor, "Digite o número do pet que deseja excluir (0 para retornar para o menu principal): ");
+                    if (petIndex == null) {
+                        System.out.println("Código inválido. Tente novamente.");
+                        continue;
+                    }
+
+                    if (opcao == 0){
+                        System.out.println("Voltando para o menu principal...");
+                        return;
+                    }
+
+                    if (petIndex < 1 || petIndex > tutorEncontrado.getPets().size())
+                        System.out.println("Número inválido! Tente novamente.");
+                    else {
+                        Pet removido = tutorEncontrado.getPets().remove(petIndex - 1);
+                        System.out.println("Pet '" + removido.getNome() + "' removido com sucesso!");
+                        return;
+                    }
+                }
+            }
+
+            System.out.println("Valor invalido. Tente novamente.");
+
+        }
     }
 }

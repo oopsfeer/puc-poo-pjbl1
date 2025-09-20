@@ -45,6 +45,10 @@ public class Tutor {
         return dataNascimento.format(formato);
     }
 
+    public ArrayList<Pet> getPets(){
+        return pets;
+    }
+
     // Setters
     public void incluiPet(String nome, String tipo, String cor){
         Pet pet = new Pet(nome, tipo, cor);
